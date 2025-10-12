@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import EventCard from "@/components/EventCard";
@@ -6,14 +7,37 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Calendar, MapPin, TrendingUp, Code, Trophy, Music, Palette, Music2, Theater, Camera, Gamepad2, BookOpen, Lightbulb, ChevronRight } from "lucide-react";
 import { events, colleges, clubs, categories } from "@/data/mockData";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  
   // Split events for different sections
   const trendingEvents = events.slice(0, 3);
   const upcomingEvents = events.slice(3);
   
   // Show only top 8 colleges on home page
   const featuredColleges = colleges.slice(0, 8);
+  
+  // Get unique locations from events
+  const locations = Array.from(new Set(events.map(e => e.venue.split(",")[0].trim()))).sort();
+  
+  const handleSearch = () => {
+    if (!searchQuery && selectedLocation === "all" && selectedCategory === "all") {
+      toast.info("Please enter a search term or select filters");
+      return;
+    }
+    
+    // For now, navigate to categories page with filters
+    // In a real app, you'd pass these as URL params or state
+    navigate("/categories");
+    toast.success("Search applied! Showing filtered results");
+  };
 
   const categoryIcons: Record<string, any> = {
     Code, Trophy, Music, Palette, Music2, Theater, Camera, Gamepad2, BookOpen, Lightbulb
@@ -53,18 +77,67 @@ const Index = () => {
                   <Input 
                     placeholder="Search events, colleges, or clubs..." 
                     className="pl-12 h-12 border-0 bg-transparent"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   />
                 </div>
-                <div className="flex gap-2">
-                  <Button variant="outline" className="h-12">
-                    <MapPin className="h-4 w-4 mr-2" />
-                    Location
-                  </Button>
-                  <Button variant="outline" className="h-12">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Date
-                  </Button>
-                  <Button variant="hero" className="h-12 px-8">
+                <div className="flex gap-2 flex-wrap">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="h-12">
+                        <MapPin className="h-4 w-4 mr-2" />
+                        {selectedLocation === "all" ? "Location" : selectedLocation}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-64">
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-sm">Select Location</h4>
+                        <Select value={selectedLocation} onValueChange={setSelectedLocation}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose location" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Locations</SelectItem>
+                            {locations.map((loc) => (
+                              <SelectItem key={loc} value={loc}>
+                                {loc}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="h-12">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        Category
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-64">
+                      <div className="space-y-2">
+                        <h4 className="font-medium text-sm">Select Category</h4>
+                        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Categories</SelectItem>
+                            {categories.map((cat) => (
+                              <SelectItem key={cat.id} value={cat.id}>
+                                {cat.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  
+                  <Button variant="hero" className="h-12 px-8" onClick={handleSearch}>
                     Search
                   </Button>
                 </div>

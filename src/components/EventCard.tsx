@@ -60,9 +60,11 @@ const EventCard = ({ id, title, image, date, venue, price, category, college }: 
               <IndianRupee className="h-5 w-5 text-accent" />
               <span className="text-lg font-bold">{price === 0 ? "Free" : price}</span>
             </div>
-            <Button variant="cta" size="sm">
-              Register
-            </Button>
+            <Link to={`/event/${id}/book`} onClick={(e) => e.stopPropagation()}>
+              <Button variant="cta" size="sm">
+                Register
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

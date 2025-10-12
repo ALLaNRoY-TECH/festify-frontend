@@ -25,7 +25,10 @@ const Index = () => {
   const featuredColleges = colleges.slice(0, 8);
   
   // Get unique locations from events
-  const locations = Array.from(new Set(events.map(e => e.venue.split(",")[0].trim()))).sort();
+  const locations = Array.from(new Set(colleges.map(c => {
+    const parts = c.location.split(", ");
+    return parts[parts.length - 1]; // Get state
+  }))).sort();
   
   const handleSearch = () => {
     if (!searchQuery && selectedLocation === "all" && selectedCategory === "all") {

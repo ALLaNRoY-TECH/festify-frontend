@@ -127,9 +127,11 @@ const EventDetails = () => {
                 </div>
               </div>
 
-              <Button variant="cta" className="w-full h-12 text-base mb-3">
-                Register Now
-              </Button>
+              <Link to={`/event/${id}/book`} className="w-full">
+                <Button variant="cta" className="w-full h-12 text-base mb-3">
+                  Register Now
+                </Button>
+              </Link>
 
               <Button variant="outline" className="w-full">
                 Add to Wishlist

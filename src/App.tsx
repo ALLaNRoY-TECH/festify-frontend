@@ -12,6 +12,9 @@ import Categories from "./pages/Categories";
 import CategoryEvents from "./pages/CategoryEvents";
 import Colleges from "./pages/Colleges";
 import Clubs from "./pages/Clubs";
+import CollegeDetails from "./pages/CollegeDetails";
+import ClubDetails from "./pages/ClubDetails";
+import BookEvent from "./pages/BookEvent";
 
 const queryClient = new QueryClient();
 
@@ -26,10 +29,13 @@ const App = () => (
           <Route path="/auth/user" element={<UserLogin />} />
           <Route path="/auth/organiser" element={<OrganiserLogin />} />
           <Route path="/event/:id" element={<EventDetails />} />
+          <Route path="/event/:id/book" element={<BookEvent />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/category/:categoryId" element={<CategoryEvents />} />
           <Route path="/colleges" element={<Colleges />} />
+          <Route path="/college/:id" element={<CollegeDetails />} />
           <Route path="/clubs" element={<Clubs />} />
+          <Route path="/club/:id" element={<ClubDetails />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

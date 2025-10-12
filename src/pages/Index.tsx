@@ -11,6 +11,9 @@ const Index = () => {
   // Split events for different sections
   const trendingEvents = events.slice(0, 3);
   const upcomingEvents = events.slice(3);
+  
+  // Show only top 8 colleges on home page
+  const featuredColleges = colleges.slice(0, 8);
 
   const categoryIcons: Record<string, any> = {
     Code, Trophy, Music, Palette, Music2, Theater, Camera, Gamepad2, BookOpen, Lightbulb
@@ -155,7 +158,7 @@ const Index = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {colleges.map((college) => (
+            {featuredColleges.map((college) => (
               <Link key={college.id} to={`/college/${college.id}`}>
                 <div className="group p-6 bg-card rounded-xl border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-glow)]">
                   <div className="flex flex-col items-center text-center space-y-4">

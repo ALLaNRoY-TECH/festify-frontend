@@ -9,6 +9,7 @@ import { Search, Calendar, MapPin, TrendingUp, Code, Trophy, Music, Palette, Mus
 import { events, colleges, clubs, categories } from "@/data/mockData";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -165,151 +166,166 @@ const Index = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4">
-        {/* Happening Now Section */}
-        <section className="py-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">🔥 Happening Now</h2>
-              <p className="text-muted-foreground">Don't miss these trending events</p>
-            </div>
-            <Link to="/categories">
-              <Button variant="ghost">
-                View All
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {trendingEvents.map((event) => (
-              <EventCard key={event.id} {...event} />
-            ))}
-          </div>
-        </section>
-
-        {/* Categories Section */}
-        <section className="py-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-2">Browse by Category</h2>
-            <p className="text-muted-foreground">Find events that match your interests</p>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categories.map((category) => {
-              const Icon = categoryIcons[category.icon];
-              return (
-                <Link key={category.id} to={`/category/${category.id}`}>
-                  <div className="group p-6 bg-card rounded-xl hover:bg-gradient-to-br hover:from-primary/10 hover:to-accent/10 border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-glow)]">
-                    <div className="flex flex-col items-center space-y-3 text-center">
-                      {Icon && (
-                        <div className="w-12 h-12 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center transition-colors">
-                          <Icon className="h-6 w-6 text-primary" />
-                        </div>
-                      )}
-                      <span className="font-semibold group-hover:text-primary transition-colors">
-                        {category.name}
-                      </span>
-                    </div>
-                  </div>
+      <div className="container mx-auto px-4 py-8">
+        <Accordion type="multiple" defaultValue={["happening-now", "categories", "colleges", "clubs", "upcoming"]} className="space-y-4">
+          {/* Happening Now Section */}
+          <AccordionItem value="happening-now" className="border rounded-lg px-6 bg-card/50">
+            <AccordionTrigger className="hover:no-underline py-6">
+              <div className="flex items-center justify-between w-full pr-4">
+                <div className="text-left">
+                  <h2 className="text-3xl font-bold mb-2">🔥 Happening Now</h2>
+                  <p className="text-muted-foreground text-sm">Don't miss these trending events</p>
+                </div>
+                <Link to="/categories" onClick={(e) => e.stopPropagation()}>
+                  <Button variant="ghost" size="sm">
+                    View All
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
                 </Link>
-              );
-            })}
-          </div>
-        </section>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
+                {trendingEvents.map((event) => (
+                  <EventCard key={event.id} {...event} />
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
 
-        {/* Top Colleges Section */}
-        <section className="py-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">🎓 Top Colleges</h2>
-              <p className="text-muted-foreground">Explore events from premier institutions</p>
-            </div>
-            <Link to="/colleges">
-              <Button variant="ghost">
-                View All
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-          </div>
+          {/* Categories Section */}
+          <AccordionItem value="categories" className="border rounded-lg px-6 bg-card/50">
+            <AccordionTrigger className="hover:no-underline py-6">
+              <div className="text-left">
+                <h2 className="text-3xl font-bold mb-2">Browse by Category</h2>
+                <p className="text-muted-foreground text-sm">Find events that match your interests</p>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 pb-6">
+                {categories.map((category) => {
+                  const Icon = categoryIcons[category.icon];
+                  return (
+                    <Link key={category.id} to={`/category/${category.id}`}>
+                      <div className="group p-6 bg-card rounded-xl hover:bg-gradient-to-br hover:from-primary/10 hover:to-accent/10 border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-glow)]">
+                        <div className="flex flex-col items-center space-y-3 text-center">
+                          {Icon && (
+                            <div className="w-12 h-12 rounded-full bg-primary/10 group-hover:bg-primary/20 flex items-center justify-center transition-colors">
+                              <Icon className="h-6 w-6 text-primary" />
+                            </div>
+                          )}
+                          <span className="font-semibold group-hover:text-primary transition-colors">
+                            {category.name}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredColleges.map((college) => (
-              <Link key={college.id} to={`/college/${college.id}`}>
-                <div className="group p-6 bg-card rounded-xl border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-glow)]">
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-border group-hover:ring-primary transition-all">
-                      <img src={college.logo} alt={college.name} className="w-full h-full object-cover" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                        {college.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">{college.description}</p>
-                      <p className="text-xs text-muted-foreground mt-2 flex items-center justify-center">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        {college.location}
-                      </p>
-                    </div>
-                  </div>
+          {/* Top Colleges Section */}
+          <AccordionItem value="colleges" className="border rounded-lg px-6 bg-card/50">
+            <AccordionTrigger className="hover:no-underline py-6">
+              <div className="flex items-center justify-between w-full pr-4">
+                <div className="text-left">
+                  <h2 className="text-3xl font-bold mb-2">🎓 Top Colleges</h2>
+                  <p className="text-muted-foreground text-sm">Explore events from premier institutions</p>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* Popular Clubs Section */}
-        <section className="py-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">⭐ Popular Clubs</h2>
-              <p className="text-muted-foreground">Join vibrant student communities</p>
-            </div>
-            <Link to="/clubs">
-              <Button variant="ghost">
-                View All
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {clubs.map((club) => (
-              <Link key={club.id} to={`/club/${club.id}`}>
-                <div className="group p-6 bg-card rounded-xl border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-glow)]">
-                  <div className="flex flex-col items-center text-center space-y-4">
-                    <div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-border group-hover:ring-primary transition-all">
-                      <img src={club.logo} alt={club.name} className="w-full h-full object-cover" />
+                <Link to="/colleges" onClick={(e) => e.stopPropagation()}>
+                  <Button variant="ghost" size="sm">
+                    View All
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-6">
+                {featuredColleges.map((college) => (
+                  <Link key={college.id} to={`/college/${college.id}`}>
+                    <div className="group p-6 bg-card rounded-xl border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-glow)]">
+                      <div className="flex flex-col items-center text-center space-y-4">
+                        <div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-border group-hover:ring-primary transition-all">
+                          <img src={college.logo} alt={college.name} className="w-full h-full object-cover" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                            {college.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1">{college.description}</p>
+                          <p className="text-xs text-muted-foreground mt-2 flex items-center justify-center">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            {college.location}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                        {club.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground mt-1">{club.description}</p>
-                      <p className="text-xs text-muted-foreground mt-2">{club.college}</p>
-                    </div>
-                  </div>
+                  </Link>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* Popular Clubs Section */}
+          <AccordionItem value="clubs" className="border rounded-lg px-6 bg-card/50">
+            <AccordionTrigger className="hover:no-underline py-6">
+              <div className="flex items-center justify-between w-full pr-4">
+                <div className="text-left">
+                  <h2 className="text-3xl font-bold mb-2">⭐ Popular Clubs</h2>
+                  <p className="text-muted-foreground text-sm">Join vibrant student communities</p>
                 </div>
-              </Link>
-            ))}
-          </div>
-        </section>
+                <Link to="/clubs" onClick={(e) => e.stopPropagation()}>
+                  <Button variant="ghost" size="sm">
+                    View All
+                    <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-6">
+                {clubs.map((club) => (
+                  <Link key={club.id} to={`/club/${club.id}`}>
+                    <div className="group p-6 bg-card rounded-xl border border-border hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-[var(--shadow-glow)]">
+                      <div className="flex flex-col items-center text-center space-y-4">
+                        <div className="w-20 h-20 rounded-full overflow-hidden ring-2 ring-border group-hover:ring-primary transition-all">
+                          <img src={club.logo} alt={club.name} className="w-full h-full object-cover" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                            {club.name}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1">{club.description}</p>
+                          <p className="text-xs text-muted-foreground mt-2">{club.college}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
 
-        {/* Upcoming Events Section */}
-        <section className="py-16">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-3xl font-bold mb-2">📅 Upcoming Events</h2>
-              <p className="text-muted-foreground">Mark your calendars for these amazing events</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {upcomingEvents.map((event) => (
-              <EventCard key={event.id} {...event} />
-            ))}
-          </div>
-        </section>
+          {/* Upcoming Events Section */}
+          <AccordionItem value="upcoming" className="border rounded-lg px-6 bg-card/50">
+            <AccordionTrigger className="hover:no-underline py-6">
+              <div className="text-left">
+                <h2 className="text-3xl font-bold mb-2">📅 Upcoming Events</h2>
+                <p className="text-muted-foreground text-sm">Mark your calendars for these amazing events</p>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-6">
+                {upcomingEvents.map((event) => (
+                  <EventCard key={event.id} {...event} />
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
 
       <Footer />

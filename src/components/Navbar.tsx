@@ -1,11 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Search, Menu, User } from "lucide-react";
+import { Search, Menu, User, LogOut } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
   
   const navLinks = [
     { name: "Home", path: "/" },
@@ -50,12 +52,19 @@ const Navbar = () => {
             <Button variant="ghost" size="icon">
               <Search className="h-5 w-5" />
             </Button>
-            <Link to="/auth/user">
-              <Button variant="hero" size="sm">
-                <User className="h-4 w-4" />
-                Login
+            {user ? (
+              <Button variant="ghost" size="sm" onClick={signOut}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
               </Button>
-            </Link>
+            ) : (
+              <Link to="/login">
+                <Button variant="hero" size="sm">
+                  <User className="h-4 w-4 mr-2" />
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -84,12 +93,19 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link to="/auth/user" onClick={() => setIsMenuOpen(false)}>
-              <Button variant="hero" size="sm" className="w-full">
-                <User className="h-4 w-4" />
-                Login
+            {user ? (
+              <Button variant="ghost" size="sm" className="w-full" onClick={() => { signOut(); setIsMenuOpen(false); }}>
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
               </Button>
-            </Link>
+            ) : (
+              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="hero" size="sm" className="w-full">
+                  <User className="h-4 w-4 mr-2" />
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
         )}
       </div>

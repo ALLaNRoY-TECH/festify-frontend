@@ -22,14 +22,22 @@ const Index = () => {
   const trendingEvents = events.slice(0, 3);
   const upcomingEvents = events.slice(3);
   
-  // Show only top 8 colleges on home page
-  const featuredColleges = colleges.slice(0, 8);
-  
-  // Get unique locations from events
+  // Get unique locations from colleges
   const locations = Array.from(new Set(colleges.map(c => {
     const parts = c.location.split(", ");
     return parts[parts.length - 1]; // Get state
   }))).sort();
+  
+  // Filter colleges by selected location
+  const filteredColleges = selectedLocation === "all" 
+    ? colleges 
+    : colleges.filter(c => {
+        const state = c.location.split(", ").pop();
+        return state === selectedLocation;
+      });
+  
+  // Show only top 8 filtered colleges on home page
+  const featuredColleges = filteredColleges.slice(0, 8);
   
   const handleSearch = () => {
     if (!searchQuery && selectedLocation === "all" && selectedCategory === "all") {
